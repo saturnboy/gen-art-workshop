@@ -19,6 +19,21 @@ export const patch: Patch = function (buf) {
 };
 ```
 
+## Example Patches
+
+| File     | Example Patches             |
+| -------- | --------------------------- |
+| `ex1.ts` | ![ex1](screenshots/ex1.png) |
+| `ex2.ts` | ![ex2](screenshots/ex2.png) |
+| `ex3.ts` | ![ex3](screenshots/ex3.png) |
+| `ex4.ts` | ![ex4](screenshots/ex4.png) |
+| `ex5.ts` | ![ex5](screenshots/ex5.png) |
+| `ex6.ts` | ![ex6](screenshots/ex6.png) |
+| `js1.ts` | ![js1](screenshots/js1.png) |
+| `js2.ts` | ![js2](screenshots/js2.png) |
+| `js3.ts` | ![js3](screenshots/js3.png) |
+| `js4.ts` | ![js4](screenshots/js4.png) |
+
 ## Config
 
 ```sh
