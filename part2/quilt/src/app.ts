@@ -35,9 +35,23 @@ const sketch = (p5: P5) => {
         p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
     };
 
+    const delay = 60_000; // 1m
+    const tick = 1000; // 1s
+    let refresh = delay;
+
     p5.setup = () => {
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
         p5.noLoop();
+
+        // redraw every 1min
+        setInterval(() => {
+            refresh -= tick;
+            if (refresh <= 0) {
+                refresh = delay;
+                p5.clear();
+                p5.redraw();
+            }
+        }, tick);
     };
 
     p5.draw = () => {
@@ -58,7 +72,7 @@ const sketch = (p5: P5) => {
                     // choose a random patch
                     p = p5.random(patches);
 
-                // draw background
+                // draw background?
                 if (showBg) {
                     p5.fill((i + j) % 2 == 0 ? 255 : 204);
                     p5.noStroke();
@@ -70,7 +84,7 @@ const sketch = (p5: P5) => {
                 p.patch(buf);
                 p5.image(buf, x, y);
 
-                // draw label
+                // draw label?
                 if (showLbl) {
                     p5.fill(255, 100, 100);
                     p5.text(p.label, x + 4, y + sz - 4);
@@ -83,6 +97,9 @@ const sketch = (p5: P5) => {
         if (p5.key == " ") {
             p5.clear();
             p5.redraw();
+            refresh = delay;
+        } else if (p5.key == "s") {
+            p5.saveCanvas("out", "png");
         }
     };
 };

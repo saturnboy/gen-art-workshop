@@ -1,0 +1,21 @@
+{
+  "name": "puller",
+  "version": "0.0.1",
+  "description": "Webhook receiver and git puller",
+  "main": "puller.ts",
+  "author": "Justin Shacklette <justin@saturnboy.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "ts-node puller.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "1.13.8",
+    "hono": "4.6.20"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.8",
+    "ts-node": "10.9.2",
+    "typescript": "5.7.3"
+  }
+}
