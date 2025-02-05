@@ -1,0 +1,33 @@
+name: Quilt Tests
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - "part2/quilt/**"
+    pull_request:
+        branches: [main]
+        paths:
+            - "part2/quilt/**"
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+
+            - name: install deps
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install pytest
+
+            - name: run tests
+              run: |
+                  cd part2/quilt
+                  pytest -v tests
