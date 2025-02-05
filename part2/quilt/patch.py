@@ -75,6 +75,6 @@ if __name__ == '__main__':
     new_contents = gen_new_contents(contents, patches)
     
     with app.open('w') as fp:
-        fp.write('\n'.join(new_contents))
+        fp.write('\n'.join(new_contents) + '\n')
     
     print('done!')
