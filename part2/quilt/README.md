@@ -48,6 +48,18 @@ npm start
 
 ## Automation
 
+We want a updating quilt display...automatically.
+
+So, when new patches are added to the quilt and merged into `main`, we want our local display (say on a TV) to be updated _automatically_ with those new patches.
+
+Our local display update flow is:
+
+1. Merge PR with new patch into `main`
+2. GitHub sends webhook to a server ([smee](https://smee.io))
+3. Server receives the webhook, but proxy it to local app
+4. Local app ([puller](../puller)) pulls the updated quilt code from GitHub
+5. Monitor sees the filesystem changes and triggers a redraw
+
 ### PR Check
 
 A simple check, implemented in Python and run via Pytest, ensures that every TypeScript file in `src/` has exactly this line:
@@ -64,7 +76,7 @@ pytest -v tests
 
 ### Patch Codegen
 
-As PRs containing new patches are merged into `main`, `patch.py` generates TypeScript code in `app.ts` to include all new patches in the quilt. It also excludes the example patches.
+As PRs containing new patches are merged into `main`, `patch.py` generates TypeScript code in `app.ts` to include all new patches in the quilt. And when we have at least one _user_ patch, the existing example patches will be excluded.
 
 You can run it locally (you'll need to have Python 3.12 installed):
 
@@ -72,14 +84,40 @@ You can run it locally (you'll need to have Python 3.12 installed):
 python patch.py
 ```
 
-### Local Display
+### Webhook Proxy
 
-When new patches are added to the quilt and merged into `main`, we want our local display (say on a TV) to update immediately.
+We use [smee](https://smee.io) to receive the GitHub webhook on the server and proxy it down to our local machine.
 
-Our local display update flow is:
+Start the local smee proxy:
 
-1. Merge PR with new patch into `main`
-2. GitHub sends webhook to server
-3. Receive the webhook, but proxy it to local app
-4. Local app (see [puller](../puller)) pulls the updated quilt from GitHub
-5. Monitor sees the filesystem changes and triggers a redraw
+```sh
+smee -u https://smee.io/jOKVZWzuJ7M5sMIG -t http://localhost:3000/webhook
+```
+
+### Puller
+
+The smee proxy sends the webhook to the [puller](../puller), which then runs `git pull origin main` to grab the latest code.
+
+Start the puller:
+
+```sh
+npm start
+```
+
+### Watcher
+
+We could use something fancier like [nodemon](https://nodemon.io), but the [parcel](https://parceljs.org) development server is sufficient.
+
+Just run the quilt:
+
+```sh
+npm start
+```
+
+Which just runs (see [package.json](package.json))
+
+```sh
+parcel serve index.html --open -p 7010
+```
+
+Lastly, the quilt will redraw itself every 1 minute.
