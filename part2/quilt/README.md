@@ -46,16 +46,40 @@ npm install
 npm run start
 ```
 
-## Test
+## Automation
 
-A simple check, implemented in Python and run via Pytest, ensures that every Typescript file in `src/` has exactly this line:
+### PR Check
+
+A simple check, implemented in Python and run via Pytest, ensures that every TypeScript file in `src/` has exactly this line:
 
 ```ts
 export const patch: Patch = function (buf) {
 ```
 
-Run the check via Pytest (you'll need to have Python 3.x and Pytest installed):
+You can also run this check locally via Pytest (you'll need to have Python 3.12, plus the Pytest package installed):
 
 ```sh
 pytest -v tests
 ```
+
+### Patch Codegen
+
+As PRs containing new patches are merged into `main`, `patch.py` generates TypeScript code in `app.ts` to include all new patches in the quilt. It also excludes the example patches.
+
+You can run it locally (you'll need to have Python 3.12 installed):
+
+```sh
+python patch.py
+```
+
+### Local Display
+
+When new patches are added to the quilt and merged into `main`, we want our local display (say on a TV) to update immediately.
+
+Our local display update flow is:
+
+1. Merge PR with new patch into `main`
+2. GitHub sends webhook to server
+3. Receive the webhook, but proxy it to local app
+4. Local app (see [puller](../puller)) pulls the updated quilt from GitHub
+5. Monitor sees the filesystem changes and triggers a redraw
