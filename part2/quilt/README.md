@@ -43,7 +43,7 @@ npm install
 ## Run
 
 ```sh
-npm run start
+npm start
 ```
 
 ## Automation
