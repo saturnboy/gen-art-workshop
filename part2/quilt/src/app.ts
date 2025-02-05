@@ -83,6 +83,8 @@ const sketch = (p5: P5) => {
         if (p5.key == " ") {
             p5.clear();
             p5.redraw();
+        } else if (p5.key == "s") {
+            p5.saveCanvas("out", "png");
         }
     };
 };
