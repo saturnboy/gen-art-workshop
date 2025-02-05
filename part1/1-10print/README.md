@@ -1,6 +1,6 @@
 # 10print
 
-Generative art of the classic C64 one-liner maze.
+The classic C64 one-liner maze art.
 
 ```basic
 10 PRINT CHR$(205.5+RND(1)); : GOTO 10
