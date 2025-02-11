@@ -10,13 +10,12 @@ app.post("/webhook", async (c) => {
         const dir = path.resolve(__dirname, ".");
 
         // Execute git pull
-        exec("git pull origin main", { cwd: dir }, (error, stdout, stderr) => {
+        exec("git pull origin main", { cwd: dir }, (error, stdout, _) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return c.json({ resp: "error running git pull" }, 500);
             }
-            console.log(`git pull stdout: ${stdout}`);
-            console.error(`git pull stderr: ${stderr}`);
+            console.log(`\n${stdout}`);
         });
         return c.json({ resp: "ok" }, 200);
     } catch (error) {
@@ -26,5 +25,5 @@ app.post("/webhook", async (c) => {
 });
 
 const port = 3000;
-console.log(`Puller is running on port ${port}`);
+console.log(`quilt puller : port ${port}`);
 serve({ fetch: app.fetch, port });

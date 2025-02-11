@@ -88,7 +88,13 @@ python patch.py
 
 We use [smee](https://smee.io) to receive the GitHub webhook on the server and proxy it down to our local machine.
 
-Start the local smee proxy:
+Install `smee` globally:
+
+```sh
+npm install -g smee-client
+```
+
+Start the local `smee` proxy, forwarding webhooks to the [puller](../puller):
 
 ```sh
 smee -u https://smee.io/jOKVZWzuJ7M5sMIG -t http://localhost:3000/webhook
@@ -103,6 +109,9 @@ Start the puller:
 ```sh
 npm start
 ```
+
+Puller runs at:  
+http://localhost:3000/webhook
 
 ### Watcher
 
