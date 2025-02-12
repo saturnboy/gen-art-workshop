@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "parcel serve index.html --open -p 7010",
+    "start": "parcel serve index.html --open -p 8010",
     "build": "parcel build index.html"
   },
   "dependencies": {
