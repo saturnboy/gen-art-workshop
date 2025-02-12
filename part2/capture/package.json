@@ -1,0 +1,22 @@
+{
+  "name": "capture",
+  "version": "0.0.1",
+  "description": "screenshot the target webpage",
+  "default": "index.html",
+  "author": "Justin Shacklette <justin@saturnboy.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@types/p5": "1.7.6",
+    "p5": "1.11.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.13.1",
+    "parcel": "2.13.3",
+    "typescript": "5.7.3"
+  }
+}
