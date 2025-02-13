@@ -3,7 +3,7 @@ import { expect } from "chai";
 import hre, { ignition } from "hardhat";
 import QuiltModule from "../ignition/modules/quilt";
 
-describe("test contract", () => {
+describe("deploy test", () => {
     it("should deploy contract with owner", async () => {
         const { quilt } = await ignition.deploy(QuiltModule);
 
