@@ -13,25 +13,25 @@ const sketch = (p5: P5) => {
     p5.draw = () => {
         const W = p5.windowWidth,
             H = p5.windowHeight,
-            SZ = 100,
-            ROWS = p5.floor(H / SZ),
-            COLS = p5.floor(W / SZ),
-            GAP = p5.min((W - COLS * SZ) / (COLS + 1), (H - ROWS * SZ) / (ROWS + 1));
+            sz = 100,
+            rows = p5.floor(H / sz),
+            cols = p5.floor(W / sz),
+            gap = p5.min((W - cols * sz) / (cols + 1), (H - rows * sz) / (rows + 1));
 
         p5.noFill();
         p5.stroke(34); // #22
         p5.strokeWeight(1);
 
-        for (let i = 0; i < COLS; i++) {
-            for (let j = 0; j < ROWS; j++) {
-                const x = i * SZ + GAP * (i + 1),
-                    y = j * SZ + GAP * (j + 1);
-                sq(x, y, SZ);
+        for (let i = 0; i < cols; i++) {
+            for (let j = 0; j < rows; j++) {
+                const x = i * sz + gap * (i + 1),
+                    y = j * sz + gap * (j + 1);
+                drawSquare(x, y, sz);
             }
         }
     };
 
-    const sq = (x: number, y: number, sz: number) => {
+    const drawSquare = (x: number, y: number, sz: number) => {
         if (sz <= 5) {
             // too small, so stop recursion
             return;
@@ -51,7 +51,7 @@ const sketch = (p5: P5) => {
         p5.endShape(p5.CLOSE);
 
         const r = p5.floor(p5.random(1, 13));
-        sq(x + r, y + r, sz - r * 2);
+        drawSquare(x + r, y + r, sz - r * 2);
     };
 
     p5.keyPressed = () => {

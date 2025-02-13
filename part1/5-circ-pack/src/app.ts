@@ -15,11 +15,11 @@ const sketch = (p5: P5) => {
     p5.draw = () => {
         const W = p5.windowWidth,
             H = p5.windowHeight,
-            RMAX = p5.floor(p5.min(W, H) * p5.random([0.1, 0.15, 0.2, 0.25, 0.3])),
-            RMIN = 3,
-            RSTEP = 1,
+            rMax = p5.floor(p5.min(W, H) * p5.random([0.1, 0.15, 0.2, 0.25, 0.3])),
+            rMin = 3,
+            Δr = 1,
             N = 2000,
-            TRIES = 100;
+            tries = 100;
 
         let circles: Circle[] = [];
 
@@ -50,11 +50,11 @@ const sketch = (p5: P5) => {
         };
 
         for (let i = 0; i < N; i++) {
-            for (let j = 0; j < TRIES; j++) {
-                // random pos + min radius
-                const x = p5.random(0 + RMIN, W - RMIN),
-                    y = p5.random(0 + RMIN, H - RMIN),
-                    c: Circle = { x: x, y: y, r: RMIN };
+            for (let j = 0; j < tries; j++) {
+                // circ @ random pos w/ min radius
+                const x = p5.random(0 + rMin, W - rMin),
+                    y = p5.random(0 + rMin, H - rMin),
+                    c: Circle = { x: x, y: y, r: rMin };
 
                 // if already collision at min radius, try again
                 if (checkCircleCollision(c) || checkBoundaryCollision(c)) {
@@ -62,12 +62,12 @@ const sketch = (p5: P5) => {
                 }
 
                 // min radius fits, so attempt to grow it
-                while (c.r <= RMAX && !checkCircleCollision(c) && !checkBoundaryCollision(c)) {
-                    c.r += RSTEP;
+                while (c.r <= rMax && !checkCircleCollision(c) && !checkBoundaryCollision(c)) {
+                    c.r += Δr;
                 }
 
                 // found largest circle that still fits, so add to list
-                circles.push({ x: c.x, y: c.y, r: c.r - RSTEP * 0.5 });
+                circles.push({ x: c.x, y: c.y, r: c.r - Δr * 0.5 });
                 break;
             }
         }

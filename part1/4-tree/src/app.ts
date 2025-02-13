@@ -24,16 +24,16 @@ const sketch = (p5: P5) => {
         p5.translate(W / 2, H);
 
         // trunk params
-        const SZ = H * 0.25,
+        const sz = H * 0.25,
             θ = p5.random(-5, 5);
-        p5.strokeWeight(SZ * STROKE_SCALE);
+        p5.strokeWeight(sz * STROKE_SCALE);
 
         // draw the trunk
         p5.push();
         p5.rotate(θ);
-        p5.line(0, 0, 0, -SZ); // draw up
-        p5.translate(0, -SZ); // move to top
-        branch(SZ);
+        p5.line(0, 0, 0, -sz); // draw up
+        p5.translate(0, -sz); // move to top
+        branch(sz);
         p5.pop();
     };
 
@@ -47,6 +47,7 @@ const sketch = (p5: P5) => {
             return;
         }
 
+        // right (5° → 50°), left (-50° → -5°)
         const θ = p5.random(5, 50),
             θ2 = p5.random(-50, -5);
 
