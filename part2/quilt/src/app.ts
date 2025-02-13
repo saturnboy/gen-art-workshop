@@ -63,7 +63,7 @@ const sketch = (p5: P5) => {
             showBg = false,
             showLbl = false;
 
-        console.log(`quilt: ${w}⨉${h} → ${rows}⨉${cols}`);
+        p5.background(255);
 
         for (let i = 0; i < cols; i++) {
             for (let j = 0; j < rows; j++) {
@@ -72,7 +72,7 @@ const sketch = (p5: P5) => {
                     // choose a random patch
                     p = p5.random(patches);
 
-                // draw background?
+                // draw checker board patch background?
                 if (showBg) {
                     p5.fill((i + j) % 2 == 0 ? 255 : 204);
                     p5.noStroke();

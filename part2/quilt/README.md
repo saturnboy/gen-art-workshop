@@ -126,7 +126,7 @@ npm start
 Which just runs (see [package.json](package.json))
 
 ```sh
-parcel serve index.html --open -p 7010
+parcel serve index.html --open -p 8010
 ```
 
 Lastly, the quilt will redraw itself every 1 minute.

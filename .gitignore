@@ -1,6 +1,24 @@
+# mac
 .DS_Store
+
+# typescript & parcel
 .parcel-cache
 dist
 node_modules
+
+# python
 .pytest_cache
 __pycache__
+
+# env
+.env
+
+# playwright
+playwright-report
+test-results
+
+# hardhat
+cache
+artifacts
+typechain
+typechain-types

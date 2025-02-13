@@ -1,0 +1,18 @@
+{
+  "name": "quilt-nft",
+  "version": "0.0.1",
+  "description": "Quilt NFT, a shared generative art project.",
+  "author": "Justin Shacklette <justin@saturnboy.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.2.0",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.22.18"
+  }
+}
