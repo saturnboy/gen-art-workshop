@@ -4,3 +4,6 @@ dist
 node_modules
 .pytest_cache
 __pycache__
+.env
+playwright-report
+test-results
