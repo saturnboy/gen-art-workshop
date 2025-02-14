@@ -1,52 +1,77 @@
-import type { Patch } from "./app";
+import P5 from "p5";
 
-export const patch: Patch = function (buf) {
-    const sz = buf.width,
-        cellSz = buf.max(1, buf.floor(buf.min(sz) * 0.01)),
-        n = buf.floor(sz / cellSz),
-        nScale = buf.random([0.02, 0.03, 0.04]),
-        nX = buf.random(-1_000, 1_000),
-        nY = buf.random(-1_000, 1_000);
+const sketch = (p5: P5) => {
+    p5.windowResized = () => {
+        p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+    };
 
-    // build noise grid (actually a list)
-    const noise: number[] = [];
+    p5.setup = () => {
+        p5.createCanvas(p5.windowWidth, p5.windowHeight);
+        p5.noLoop();
+    };
 
-    for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n; j++) {
-            const n = buf.noise(i * nScale + nX, j * nScale + nY);
-            noise.push(n);
-        }
-    }
+    p5.draw = () => {
+        const W = p5.windowWidth,
+            H = p5.windowHeight,
+            sz = p5.floor(p5.min(W, H) * 0.01),
+            rows = p5.floor(W / sz),
+            cols = p5.floor(H / sz),
+            noiseScale = p5.random([0.002, 0.025, 0.333]),
+            noiseX = p5.random(1_000, 100_000),
+            noiseY = p5.random(1_000, 100_000);
 
-    const numLines = buf.random([200, 400, 600]),
-        numPoints = buf.random([20, 40, 60]),
-        step = cellSz * 1.5;
-
-    buf.noFill();
-    buf.stroke(0, buf.random([50, 100, 150]));
-    buf.strokeWeight(0.5);
-
-    for (let l = 0; l < numLines; l++) {
-        let x = buf.random(0, sz),
-            y = buf.random(0, sz);
-
-        buf.beginShape();
-        for (let p = 0; p < numPoints; p++) {
-            buf.vertex(x, y);
-
-            if (x < 0 || x >= sz || y < 0 || y >= sz) {
-                // out of bounds, so line is done
-                break;
+        // build noise grid (actually a list)
+        const noise: number[] = [];
+        for (let i = 0; i < cols; i++) {
+            for (let j = 0; j < rows; j++) {
+                const n = p5.noise(i * noiseScale + noiseX, j * noiseScale + noiseY);
+                noise.push(n);
             }
-
-            const i = ~~(y / cellSz), // ~~ is faster than Math.floor()
-                j = ~~(x / cellSz),
-                k = i * n + j,
-                r = noise[k] ?? 0.5;
-
-            x += step * buf.cos(buf.TWO_PI * r);
-            y += step * buf.sin(buf.TWO_PI * r);
         }
-        buf.endShape();
-    }
+
+        const numLines = 21000,
+            numPoints = p5.random([10, 100, 1000]),
+            step = sz * 1.333;
+
+        // draw flow lines (built up one pt at a time)
+        for (let l = 0; l < numLines; l++) {
+            // start at random pos
+            let x = p5.random(0, W),
+                y = p5.random(0, H);
+
+            p5.noFill();
+            p5.stroke(3, 2000);
+            p5.strokeWeight(0.5);
+
+            p5.beginShape();
+            for (let p = 0; p < numPoints; p++) {
+                p5.vertex(x, y);
+
+                if (x < 0 || x >= W || y < 0 || y >= H) {
+                    // out of bounds, so line is done
+                    break;
+                }
+
+                // get flow vector at curr pos
+                const i = ~~(y / sz), // ~~ is faster than Math.floor()
+                    j = ~~(x / sz),
+                    k = i * rows + j,
+                    r = noise[k] ?? 0.5;
+
+                // make step in flow's direction
+                x += step * p5.cos(p5.TWO_PI * r);
+                y += step * p5.sin(p5.TWO_PI * r);
+            }
+            p5.endShape();
+        }
+    };
+
+    p5.keyPressed = () => {
+        if (p5.key == " ") {
+            p5.clear();
+            p5.redraw();
+        }
+    };
 };
+
+new P5(sketch);
