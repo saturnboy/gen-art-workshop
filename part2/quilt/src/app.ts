@@ -1,18 +1,18 @@
 import P5 from "p5";
 
 // imports - start
+import { patch as Myawesomefile } from "./Myawesomefile";
 import { patch as imgTest } from "./imgTest";
 import { patch as redDot } from "./redDot";
-import { patch as dot } from "./dot";
 // imports - end
 
 export type Patch = { (buf: P5.Graphics): void };
 
 const patches: { label: string; patch: Patch }[] = [
     // patches - start
+    { label: "Myawesomefile", patch: Myawesomefile },
     { label: "imgTest", patch: imgTest },
     { label: "redDot", patch: redDot },
-    { label: "dot", patch: dot },
     // patches - end
 ];
 
