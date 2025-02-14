@@ -13,7 +13,7 @@ const sketch = (p5: P5) => {
     p5.draw = () => {
         const W = p5.windowWidth,
             H = p5.windowHeight,
-            sz = p5.floor(p5.min(W, H) * 0.01),
+            sz = p5.floor(p5.min(W, H) * 0.10),
             rows = p5.floor(W / sz),
             cols = p5.floor(H / sz),
             noiseScale = p5.random([0.02, 0.025, 0.03]),
@@ -31,7 +31,7 @@ const sketch = (p5: P5) => {
 
         const numLines = 4000,
             numPoints = p5.random([10, 100, 1000]),
-            step = sz * 1.333;
+            step = sz * 1.133;
 
         // draw flow lines (built up one pt at a time)
         for (let l = 0; l < numLines; l++) {
