@@ -3,6 +3,7 @@ import P5 from "p5";
 // imports - start
 import { patch as Myawesomefile } from "./Myawesomefile";
 import { patch as ex_j } from "./ex_j";
+import { patch as img2 } from "./img2";
 import { patch as imgTest } from "./imgTest";
 import { patch as redDot } from "./redDot";
 import { patch as sasha } from "./sasha";
@@ -14,6 +15,7 @@ const patches: { label: string; patch: Patch }[] = [
     // patches - start
     { label: "Myawesomefile", patch: Myawesomefile },
     { label: "ex_j", patch: ex_j },
+    { label: "img2", patch: img2 },
     { label: "imgTest", patch: imgTest },
     { label: "redDot", patch: redDot },
     { label: "sasha", patch: sasha },
