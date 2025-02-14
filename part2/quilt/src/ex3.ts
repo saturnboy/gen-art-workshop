@@ -4,6 +4,12 @@ export const patch: Patch = function (buf) {
     const sz = buf.width,
         steps = [-20, -10, -1, 0, 0, 0, 1, 10, 20];
 
+
+    const randomColor = () => {
+        return (buf.random(255), buf.random(255), buf.random(255));
+    }
+    
+
     const sq = (x: number, y: number, sz: number) => {
         if (sz <= 5) {
             // too small, so stop recursion
@@ -15,6 +21,9 @@ export const patch: Patch = function (buf) {
             d3 = buf.random(steps),
             d4 = buf.random(steps);
 
+
+        buf.stroke(randomColor(), 0, 0);
+
         buf.beginShape();
         buf.vertex(x + d1, y + d1);
         buf.vertex(x + sz + d2, y + d2);
@@ -24,7 +33,7 @@ export const patch: Patch = function (buf) {
 
 
         //const r = buf.random([1, 2, 3, 4, 5, 6, 7, 8]);
-        
+
         let r = buf.floor(buf.random(1, 100));
         r = Math.ceil(Math.abs(Math.log(Math.cos(r) * Math.cos(r))));
 
