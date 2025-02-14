@@ -11,12 +11,14 @@ import { patch as js1 } from "./js1";
 import { patch as js2 } from "./js2";
 import { patch as js3 } from "./js3";
 import { patch as js4 } from "./js4";
+import { patch as ex_j } from "./ex_j";
 // imports - end
 
 export type Patch = { (buf: P5.Graphics): void };
 
 const patches: { label: string; patch: Patch }[] = [
     // patches - start
+    /*
     { label: "ex1", patch: ex1 },
     { label: "ex2", patch: ex2 },
     { label: "ex3", patch: ex3 },
@@ -27,6 +29,8 @@ const patches: { label: string; patch: Patch }[] = [
     { label: "js2", patch: js2 },
     { label: "js3", patch: js3 },
     { label: "js4", patch: js4 },
+     */
+    { label: "ex_j", patch: ex_j },
     // patches - end
 ];
 
