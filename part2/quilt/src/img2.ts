@@ -11,5 +11,4 @@ export const patch: Patch = function (buf) {
     //     (img: P5.Image) => { buf.image(img, 0, 0) })
     buf.textAlign(buf.CENTER, buf.CENTER);
     buf.text("😳", sz / 2, sz / 2);
-
 };
