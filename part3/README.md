@@ -18,13 +18,13 @@ Update `prepare_metadata.py` with the CID, and then run `python prepare_metadata
 
 First, install [Hardhat](https://hardhat.org/) globally:
 
-```
+```sh
 npm install -g hardhat
 ```
 
 Then, run it to initialize a new project:
 
-```
+```sh
 npx hardhat init
 ```
 
@@ -32,7 +32,7 @@ npx hardhat init
 
 Install other deps:
 
-```
+```sh
 npm install --save-dev dotenv
 npm install --save-dev @openzeppelin/contracts
 ```
@@ -46,7 +46,7 @@ Setup a `.env` with your keys:
 
 ## Contract
 
-Here's a minimal NFT contract, built by the _awesome_ [OpenZeppelin Contracts Wizard](https://wizard.openzeppelin.com):
+Here's a minimal NFT contract, built by the _awesome_ [OpenZeppelin Contracts Wizard](https://wizard.openzeppelin.com), plus some slight modifications to make the first token minted #1 (not #0):
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -59,15 +59,17 @@ contract Quilt is ERC721, Ownable {
     uint256 private _nextTokenId;
     uint256 private constant MAX_SUPPLY = 999;
 
-    constructor(address initialOwner) ERC721("Quilt", "QLT") Ownable(initialOwner) {}
+    constructor(address initialOwner) ERC721("Quilt", "QLT") Ownable(initialOwner) {
+        _nextTokenId = 1; // first token is #1
+    }
 
     function _baseURI() internal pure override returns (string memory) {
         return "ipfs://IPFS_JSONS_CID/";
     }
 
     function safeMint(address to) public onlyOwner {
+        require(_nextTokenId <= MAX_SUPPLY, "exceeded max supply");
         uint256 tokenId = _nextTokenId++;
-        require(tokenId <= MAX_SUPPLY, "exceeded max supply");
         _safeMint(to, tokenId);
     }
 }
@@ -76,14 +78,14 @@ contract Quilt is ERC721, Ownable {
 Notes:
 
 1. Uses IPFS for metadata and image asset storage.
-2. Very locked down. The `IPFS_CID` is baked in. The `MAX_SUPPLY` is baked in. Both need to be _correctly_ set at contract deploy time.
-3. TokenURIs range from `ipfs://IPFS_CID/1` to `ipfs://IPFS_CID/N`
+2. Very locked down. The IPFS `CID` is baked in. The `MAX_SUPPLY` is baked in. Both need to be _correctly_ set at contract deploy time.
+3. TokenURIs start at #1 (`ipfs://IPFS_CID/1`) and got to N inclusive (`ipfs://IPFS_CID/N`)
 
 ## Test
 
 Run tests with:
 
-```
+```sh
 npx hardhat test
 ```
 
@@ -103,7 +105,7 @@ const config: HardhatUserConfig = {
 };
 ```
 
-Next, specify any contract parameters in `params.json`:
+Next, specify the contract parameters in `params.json`, for our contract we specify the `initialOwner`:
 
 ```json
 {
@@ -113,9 +115,9 @@ Next, specify any contract parameters in `params.json`:
 }
 ```
 
-Then, you can deploy to `Sepolia` testnet like this:
+Then, you can deploy to `Sepolia` testnet using [Hardhat Ignition](https://hardhat.org/ignition/docs/getting-started#overview) like this:
 
-```
+```sh
 npx hardhat ignition deploy ignition/modules/quilt.ts --network sepolia --parameters params.json
 ```
 
@@ -134,19 +136,56 @@ Batch #1
 
 Deployed Addresses
 
-QuiltModule#Quilt - 0x02456C082ecbE50aeB027D4Ad3Ea37B78F37649E
+QuiltModule#Quilt - 0x3a07cdb338dcC679f2220CEe2104deeE3f4fe1E2
 ```
 
-Check it out on [sepolia.etherscan.io](https://sepolia.etherscan.io/address/0x02456C082ecbE50aeB027D4Ad3Ea37B78F37649E)
+The contract is now deployed on the Sepolia testnet. Check it out on [sepolia.etherscan.io](https://sepolia.etherscan.io/address/0x3a07cdb338dcC679f2220CEe2104deeE3f4fe1E2)
 
-> NOTE: pass `--reset` to erase and then re-deploy the contract
+> NOTE: Pass in `--reset` to erase the local deployment cache and then re-deploy the contract (which will deploy to an all new address). The blockchain is immutable, so the original live deployment can be erased or removed.
+
+> NOTE 2: Pass in `--verify` to deploy and _verify_ on Etherscan all in one shot (see [Verify](#Verify) section below).
 
 ### Verify
 
-After deploy, you'll want to upload the contract code if you want (you'll need to do this to call any contract methods). Just re-run the deploy (doesn't actually re-deploy without `--reset`), and include `--verify`:
+After deploy, you'll want to upload the contract code to Etherscan in order to call any contract methods. Just re-run the deploy (doesn't actually re-deploy without `--reset`), and include `--verify`.
 
-```
-npx hardhat ignition deploy ignition/modules/quilt.ts --network sepolia --parameters params.json --verify
+First, configure your Etherscan API key:
+
+```ts
+const config: HardhatUserConfig = {
+    solidity: "0.8.28",
+    networks: ..,
+    etherscan: {
+        apiKey: {
+            sepolia: ETHERSCAN_API_KEY,
+        },
+    }
+};
 ```
 
-> Note: verified contracts get a green checkmark next too the code button in etherscan.io
+Then re-deploy (doesn't actually re-deploy without `--reset`) to verify:
+
+```sh
+npx hardhat ignition deploy ignition/modules/quilt.ts --network sepolia --verify
+```
+
+Output is:
+
+```text
+✔ Confirm deploy to network sepolia (11155111)? … yes
+[ QuiltModule ] Nothing new to deploy based on previous execution stored in ./ignition/deployments/chain-11155111
+
+Deployed Addresses
+
+QuiltModule#Quilt - 0x3a07cdb338dcC679f2220CEe2104deeE3f4fe1E2
+
+Verifying deployed contracts
+
+Verifying contract "contracts/quilt.sol:Quilt" for network sepolia...
+Successfully verified contract "contracts/quilt.sol:Quilt" for network sepolia:
+  - https://sepolia.etherscan.io/address/0x3a07cdb338dcC679f2220CEe2104deeE3f4fe1E2#code
+```
+
+> NOTE: You don't need to run this separately, you can pass in `--verify` with the intial deploy command to deploy and verify all in one shot.
+
+> NOTE 2: Once a contract is verified, it will have a green checkmark on the `Code` button in Etherscan
